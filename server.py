@@ -23,8 +23,8 @@ vector = iv(BLOCK_SIZE)
 cipher = AES.new(encryption_key, AES.MODE_CBC, vector)
 
 
-@app.route("/calculate2", methods=['POST'])
-def hello():
+@app.route("/calculate-price", methods=['POST'])
+def price-service():
     decrypted = DecodeAES(cipher, request.form["payload"])[16:]
     json_payload = json.loads(decrypted)
     new_price = json_payload["calculatedPrice"]
