@@ -1,4 +1,4 @@
-pricing-service
-===============
+webhooks and services
+=====================
 
-Example of price calculation service written in Python with Flask for T Dispatch
+This is a public repository with an example implementation in Python and documentation available on Wiki on how to use T Dispatch webhooks and services for extending its functionalities.
