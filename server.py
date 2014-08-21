@@ -24,7 +24,7 @@ cipher = AES.new(encryption_key, AES.MODE_CBC, vector)
 
 
 @app.route("/calculate-price", methods=['POST'])
-def price-service():
+def price_service():
     decrypted = DecodeAES(cipher, request.form["payload"])[16:]
     json_payload = json.loads(decrypted)
     new_price = json_payload["calculatedPrice"]
