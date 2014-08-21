@@ -36,6 +36,13 @@ def hello():
         })
     new_price["cost"] += 5
     return jsonify(new_price)
+    
+@app.route("/test-webhook", methods=['POST'])
+def test_webhook():
+    decrypted = DecodeAES(cipher, request.form["payload"])[16:]
+    json_payload = json.loads(decrypted)
+    return jsonify(json_payload)
+    
 
 if __name__ == "__main__":
     app.run(port=5040, debug=True)
