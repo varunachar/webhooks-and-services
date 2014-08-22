@@ -72,4 +72,4 @@ def send_notification(body):
 
 
 if __name__ == "__main__":
-    app.run(port=5040, debug=True)
+    app.run(port=5040)
