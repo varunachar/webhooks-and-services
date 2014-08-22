@@ -6,6 +6,7 @@ import random
 import string
 import base64
 import json
+import requests
 
 app = Flask(__name__)
 
@@ -22,6 +23,12 @@ encryption_key = "1234567890123456"
 vector = iv(BLOCK_SIZE)
 cipher = AES.new(encryption_key, AES.MODE_CBC, vector)
 
+# Download and run https://github.com/marinho/notification-center
+NOTIFICATION_ENABLED = True
+NOTIFICATION_CENTER_SECURITY_TOKEN = "VeraLeniLeticia"
+NOTIFICATION_CENTER_URL = "http://localhost:5030/notification"
+NOTIFICATION_CHANNEL = "fromTDispatch"
+
 
 @app.route("/calculate-price", methods=['POST'])
 def price_service():
@@ -35,14 +42,34 @@ def price_service():
         "subtotal": new_price["fareNarrative"][-1]["subtotal"] + 5,
         })
     new_price["cost"] += 5
+
+    if NOTIFICATION_ENABLED:
+        send_notification(new_price)
+
     return jsonify(new_price)
+
     
 @app.route("/test-webhook", methods=['POST'])
 def test_webhook():
     decrypted = DecodeAES(cipher, request.form["payload"])[16:]
     json_payload = json.loads(decrypted)
+
+    if NOTIFICATION_ENABLED:
+        send_notification(json_payload)
+
     return jsonify(json_payload)
-    
+
+
+def send_notification(body):
+    data = {}
+    data.update(body)
+    data["channel"] = NOTIFICATION_CHANNEL
+    data["securityToken"] = NOTIFICATION_CENTER_SECURITY_TOKEN
+
+    requests.post(NOTIFICATION_CENTER_URL,
+                  data=json.dumps(data),
+                  headers={"Content-Type": "application/json"})
+
 
 if __name__ == "__main__":
     app.run(port=5040, debug=True)
