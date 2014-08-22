@@ -34,6 +34,10 @@ NOTIFICATION_CHANNEL = "fromTDispatch"
 def price_service():
     decrypted = DecodeAES(cipher, request.form["payload"])[16:]
     json_payload = json.loads(decrypted)
+
+    if NOTIFICATION_ENABLED:
+        send_notification(json_payload)
+
     new_price = json_payload["calculatedPrice"]
     new_price["fareNarrative"].append({
         "snippet": "custom",
@@ -42,10 +46,6 @@ def price_service():
         "subtotal": new_price["fareNarrative"][-1]["subtotal"] + 5,
         })
     new_price["cost"] += 5
-
-    if NOTIFICATION_ENABLED:
-        send_notification(new_price)
-
     return jsonify(new_price)
 
     
