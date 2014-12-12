@@ -71,5 +71,20 @@ def send_notification(body):
                   headers={"Content-Type": "application/json"})
 
 
+@app.route("/healthcheck")
+def healthcheck():
+    return "WORKING"
+
+
+@app.route("/version")
+def current_version():
+    return "webhooks-and-services 0.1.0"
+
+
+@app.route("/force-error")
+def force_error():
+    1 + "a"
+
+
 if __name__ == "__main__":
-    app.run(port=5040)
+    app.run(host="0.0.0.0", port=5040)
